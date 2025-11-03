@@ -9,8 +9,8 @@ function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isLogin
-      ? "http://127.0.0.1:5000/api/login"
-      : "http://127.0.0.1:5000/api/register";
+      ? "https://swapcircle.onrender.com/api/login"
+      : "https://swapcircle.onrender.com/api/register";
 
     const res = await fetch(url, {
       method: "POST",
