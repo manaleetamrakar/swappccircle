@@ -5,6 +5,22 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Item, SwapRequest, init_db
 
+# Initialize Flask app FIRST (this must come before @app.route)
+app = Flask(__name__)
+CORS(app)
+
+# Configuration
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///swapcircle_final.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["JWT_SECRET_KEY"] = "swapcircle_secret_key"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
+
+# Initialize JWT and DB
+jwt = JWTManager(app)
+init_db(app)
+
+# ---------- ROUTES ----------
+
 @app.route('/')
 def home():
     return {"message": "Backend is running!"}
@@ -12,17 +28,6 @@ def home():
 @app.route('/api/health')
 def health():
     return {"status": "ok"}
-
-app = Flask(__name__)
-CORS(app)
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///swapcircle_final.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["JWT_SECRET_KEY"] = "swapcircle_secret_key"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
-
-jwt = JWTManager(app)
-init_db(app)
 
 
 @app.route("/api/register", methods=["POST"])
@@ -116,6 +121,7 @@ def view_requests():
     })
 
 
+# ---------- RUN SERVER ----------
 if __name__ == '__main__':
     import os
     port = int(os.environ.get("PORT", 5000))
