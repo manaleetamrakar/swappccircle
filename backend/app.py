@@ -5,6 +5,14 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Item, SwapRequest, init_db
 
+@app.route('/')
+def home():
+    return {"message": "Backend is running!"}
+
+@app.route('/api/health')
+def health():
+    return {"status": "ok"}
+
 app = Flask(__name__)
 CORS(app)
 
